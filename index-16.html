@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102c25">
+<title>Minha Videoteca X</title>
+<style>
+:root{--bg:#0d1513;--panel:#15211d;--panel2:#1d2d27;--text:#f3f7f4;--muted:#aabbb2;--green:#8ed8ad;--line:#2d4339;--danger:#ffb4a9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;background:var(--green);color:#10251b;font-weight:700}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#442724;color:#ffe2dd;border:1px solid #74413a}
+header{position:sticky;top:0;z-index:5;background:#102019ed;border-bottom:1px solid var(--line);backdrop-filter:blur(12px);padding:14px max(16px,calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}.logo{width:38px;height:38px;border-radius:12px;background:var(--green);color:#10251b;display:grid;place-items:center;font-weight:900;font-size:20px}
+header small{display:block;color:var(--muted);font-size:.72rem;font-weight:500}
+main{max-width:1100px;margin:auto;padding:22px 16px 60px}.intro{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}.intro h1{font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.1;margin:0 0 8px}.intro p{margin:0;color:var(--muted);max-width:620px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:18px}.panel h2{font-size:1.05rem;margin:0 0 13px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:.83rem;color:var(--muted)}input,select{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;background:#0e1915;color:var(--text);padding:11px 12px;outline:none}input:focus,select:focus{border-color:var(--green)}.formactions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.hint{color:var(--muted);font-size:.8rem;margin:10px 0 0}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 14px}.toolbar input{flex:1;min-width:180px}.toolbar select{width:auto;min-width:155px}.stats{color:var(--muted);font-size:.85rem;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--panel);min-width:0}.thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#203e32,#101a16);display:grid;place-items:center;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.placeholder{display:flex;flex-direction:column;align-items:center;gap:7px;color:#d7f3e2;text-align:center;padding:12px}.xmark{width:43px;height:43px;border:2px solid #d7f3e2;border-radius:50%;display:grid;place-items:center;font-size:23px;font-weight:800}.playbadge{position:absolute;right:9px;bottom:9px;background:#07100ddd;color:#fff;padding:4px 8px;border-radius:7px;font-size:.72rem}.cardbody{padding:12px}.cardtitle{font-weight:750;line-height:1.3;overflow-wrap:anywhere;margin-bottom:7px}.meta{color:var(--muted);font-size:.78rem;display:flex;gap:7px;flex-wrap:wrap}.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:.72rem;color:#d3e7db}.cardactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.cardactions button{padding:8px 10px;font-size:.8rem}.empty{padding:38px 15px;text-align:center;border:1px dashed var(--line);border-radius:16px;color:var(--muted)}.empty strong{display:block;color:var(--text);font-size:1.05rem;margin-bottom:5px}.notice{font-size:.82rem;color:var(--muted);border-left:3px solid var(--green);padding:8px 12px;margin-top:14px}.hidden{display:none!important}
+footer{max-width:1100px;margin:auto;padding:0 16px 30px;color:var(--muted);font-size:.78rem}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);width:min(560px,calc(100% - 24px));padding:20px}dialog::backdrop{background:#000a}dialog h2{margin-top:0}.modalactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{display:block}.intro button{margin-top:14px}}
+@media(max-width:520px){main{padding-top:17px}.grid{grid-template-columns:1fr 1fr;gap:10px}.cardbody{padding:10px}.cardactions button{flex:1}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar select{flex:1}.stats{width:100%;margin-left:0}.intro p{font-size:.92rem}header{padding:11px 14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">▶</div><div>Minha Videoteca X<small>SUA BIBLIOTECA PESSOAL</small></div></div>
+  <button class="secondary" id="exportBtn" type="button">Backup</button>
+</header>
+<main>
+  <section class="intro">
+    <div><h1>Vídeos para ver depois.</h1><p>Guarde os posts interessantes do X, organize por playlists e volte a eles quando tiver tempo. Sem baixar os vídeos e sem reprodução automática.</p></div>
+    <button id="showFormBtn" type="button">＋ Salvar post</button>
+  </section>
+
+  <section class="panel" id="addPanel">
+    <h2 id="formTitle">Adicionar à videoteca</h2>
+    <form id="videoForm">
+      <div class="formgrid">
+        <div class="field full"><label for="postUrl">Link do post no X *</label><input id="postUrl" type="url" placeholder="https://x.com/usuario/status/..." required></div>
+        <div class="field full"><label for="videoTitle">Título ou anotação curta *</label><input id="videoTitle" maxlength="180" placeholder="Ex.: Uma ideia interessante sobre inteligência artificial" required></div>
+        <div class="field"><label for="author">Autor (opcional)</label><input id="author" maxlength="100" placeholder="@usuario"></div>
+        <div class="field"><label for="playlist">Playlist</label><input id="playlist" list="playlistOptions" maxlength="60" placeholder="Ex.: Tecnologia"><datalist id="playlistOptions"></datalist></div>
+        <div class="field full"><label for="coverUrl">Link de uma imagem de capa (opcional)</label><input id="coverUrl" type="url" placeholder="https://.../imagem.jpg"></div>
+      </div>
+      <div class="formactions"><button type="submit" id="saveBtn">Salvar vídeo</button><button class="secondary hidden" type="button" id="cancelEdit">Cancelar edição</button></div>
+      <p class="hint">A capa é opcional. Para manter a versão gratuita e sem API, a miniatura real não é obtida automaticamente nesta primeira versão.</p>
+    </form>
+  </section>
+
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Buscar título, autor ou link…">
+    <select id="playlistFilter" aria-label="Filtrar playlist"><option value="">Todas as playlists</option></select>
+    <select id="statusFilter" aria-label="Filtrar status"><option value="all">Todos os vídeos</option><option value="unwatched">Não assistidos</option><option value="watched">Assistidos</option></select>
+    <span class="stats" id="stats">0 vídeos</span>
+  </div>
+  <div id="videoGrid" class="grid"></div>
+  <div id="emptyState" class="empty"><strong>Sua videoteca começa aqui</strong>Quando encontrar um post interessante no X, adicione o link acima. Ele ficará guardado neste navegador.</div>
+  <div class="notice">Seus dados ficam neste navegador e neste dispositivo. Use “Backup” regularmente para exportar uma cópia e transferi-la para outro dispositivo.</div>
+</main>
+<footer>Projeto pessoal · Os posts e vídeos continuam hospedados no X. Esta página guarda links e informações que você inserir.</footer>
+
+<dialog id="backupDialog">
+  <h2>Backup da videoteca</h2>
+  <p>Exporte seus vídeos e playlists para um arquivo JSON. Para restaurar, selecione um backup salvo anteriormente.</p>
+  <div class="modalactions"><button id="downloadBackup" type="button">Baixar backup</button><button class="secondary" id="importBackup" type="button">Importar backup</button><button class="secondary" id="closeBackup" type="button">Fechar</button></div>
+  <input id="backupFile" type="file" accept="application/json,.json" class="hidden">
+  <p class="hint">Importar mescla os itens do arquivo com os que já estão salvos.</p>
+</dialog>
+<script>
+(() => {
+  const KEY = 'minha-videoteca-x-v1';
+  let videos = [];
+  let editingId = null;
+  const $ = id => document.getElementById(id);
+  const form = $('videoForm');
+  const validUrl = value => {
+    try { const u = new URL(value); return (u.protocol === 'https:' || u.protocol === 'http:') && (u.hostname === 'x.com' || u.hostname.endsWith('.x.com') || u.hostname === 'twitter.com' || u.hostname.endsWith('.twitter.com') || u.hostname === 't.co'); }
+    catch { return false; }
+  };
+  const safeLoad = () => {
+    try { const parsed = JSON.parse(localStorage.getItem(KEY) || '[]'); videos = Array.isArray(parsed) ? parsed : []; }
+    catch { videos = []; }
+  };
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(videos)); } catch { alert('Não foi possível salvar no navegador. Exporte um backup e libere espaço no armazenamento.'); } };
+  const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const playlists = () => [...new Set(videos.map(v => (v.playlist || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  const refreshPlaylistChoices = () => {
+    const current = $('playlistFilter').value;
+    $('playlistFilter').innerHTML = '<option value="">Todas as playlists</option>' + playlists().map(p=>`<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    if (playlists().includes(current)) $('playlistFilter').value = current;
+    $('playlistOptions').innerHTML = playlists().map(p=>`<option value="${escapeHtml(p)}"></option>`).join('');
+  };
+  function render() {
+    refreshPlaylistChoices();
+    const q = $('search').value.trim().toLocaleLowerCase('pt-BR');
+    const pf = $('playlistFilter').value, sf = $('statusFilter').value;
+    const filtered = videos.filter(v => {
+      const text = [v.title,v.author,v.url,v.playlist].join(' ').toLocaleLowerCase('pt-BR');
+      return (!q || text.includes(q)) && (!pf || v.playlist === pf) && (sf === 'all' || (sf === 'watched' ? v.watched : !v.watched));
+    }).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    $('videoGrid').innerHTML = filtered.map(v => {
+      const cover = v.cover && safeImageUrl(v.cover);
+      const image = cover ? `<img src="${escapeHtml(cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+      return `<article class="card" data-id="${escapeHtml(v.id)}">
+        <div class="thumb">${image}<div class="placeholder ${cover?'hidden':''}"><div class="xmark">X</div><span>POST SALVO</span></div><span class="playbadge">Abrir no X ↗</span></div>
+        <div class="cardbody"><div class="cardtitle">${escapeHtml(v.title)}</div><div class="meta">${v.author?`<span>${escapeHtml(v.author)}</span>`:''}<span>${v.watched?'✓ Assistido':'○ Para assistir'}</span></div><p>${v.playlist?`<span class="tag">${escapeHtml(v.playlist)}</span>`:'<span class="tag">Sem playlist</span>'}</p>
+        <div class="cardactions"><button type="button" data-action="open" data-id="${escapeHtml(v.id)}">Abrir post ↗</button><button class="secondary" type="button" data-action="watched" data-id="${escapeHtml(v.id)}">${v.watched?'Desmarcar':'Assistido ✓'}</button><button class="secondary" type="button" data-action="edit" data-id="${escapeHtml(v.id)}">Editar</button><button class="danger" type="button" data-action="delete" data-id="${escapeHtml(v.id)}">Excluir</button></div></div>
+      </article>`;
+    }).join('');
+    $('emptyState').classList.toggle('hidden', filtered.length > 0);
+    $('emptyState').innerHTML = videos.length ? '<strong>Nenhum vídeo encontrado</strong>Tente mudar a busca ou os filtros.' : '<strong>Sua videoteca começa aqui</strong>Quando encontrar um post interessante no X, adicione o link acima. Ele ficará guardado neste navegador.';
+    $('stats').textContent = `${filtered.length} de ${videos.length} vídeo${videos.length===1?'':'s'}`;
+  }
+  function safeImageUrl(raw) {
+    try { const u = new URL(raw); return ['https:','http:'].includes(u.protocol) ? u.href : ''; } catch { return ''; }
+  }
+  function resetForm() { editingId = null; form.reset(); $('formTitle').textContent='Adicionar à videoteca'; $('saveBtn').textContent='Salvar vídeo'; $('cancelEdit').classList.add('hidden'); }
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const url = $('postUrl').value.trim();
+    if (!validUrl(url)) { alert('Insira um link válido de x.com, twitter.com ou t.co.'); return; }
+    const title = $('videoTitle').value.trim();
+    if (!title) { alert('Digite um título ou anotação curta.'); return; }
+    const item = {url,title,author:$('author').value.trim(),playlist:$('playlist').value.trim(),cover:safeImageUrl($('coverUrl').value.trim()),updatedAt:Date.now()};
+    if (editingId) {
+      const i = videos.findIndex(v=>v.id===editingId);
+      if (i>=0) videos[i] = {...videos[i],...item};
+    } else {
+      const duplicate = videos.find(v=>v.url===url);
+      if (duplicate) { if (!confirm('Este link já está salvo. Deseja atualizar o item existente?')) return; Object.assign(duplicate,item); }
+      else videos.push({id:crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2),...item,watched:false,createdAt:Date.now()});
+    }
+    persist(); resetForm(); render();
+  });
+  $('videoGrid').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-action]'); if (!btn) return;
+    const v = videos.find(x=>x.id===btn.dataset.id); if (!v) return;
+    switch(btn.dataset.action) {
+      case 'open': window.open(v.url,'_blank','noopener,noreferrer'); break;
+      case 'watched': v.watched=!v.watched; persist(); render(); break;
+      case 'delete': if(confirm('Excluir este vídeo da sua videoteca?')) { videos=videos.filter(x=>x.id!==v.id); persist(); render(); } break;
+      case 'edit':
+        editingId=v.id; $('postUrl').value=v.url; $('videoTitle').value=v.title; $('author').value=v.author||''; $('playlist').value=v.playlist||''; $('coverUrl').value=v.cover||'';
+        $('formTitle').textContent='Editar vídeo'; $('saveBtn').textContent='Salvar alterações'; $('cancelEdit').classList.remove('hidden'); $('addPanel').scrollIntoView({behavior:'smooth',block:'start'}); break;
+    }
+  });
+  $('cancelEdit').addEventListener('click', resetForm);
+  ['search','playlistFilter','statusFilter'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+  $('showFormBtn').addEventListener('click',()=>{$('addPanel').scrollIntoView({behavior:'smooth',block:'start'});$('postUrl').focus({preventScroll:true});});
+  const dlg=$('backupDialog');
+  $('exportBtn').addEventListener('click',()=>dlg.showModal());
+  $('closeBackup').addEventListener('click',()=>dlg.close());
+  $('downloadBackup').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify({app:'Minha Videoteca X',version:1,exportedAt:new Date().toISOString(),videos},null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='backup-minha-videoteca-x.json'; a.click(); URL.revokeObjectURL(a.href);
+  });
+  $('importBackup').addEventListener('click',()=>$('backupFile').click());
+  $('backupFile').addEventListener('change',async e=>{
+    const file=e.target.files[0]; if(!file)return;
+    try {
+      const data=JSON.parse(await file.text()); const incoming=Array.isArray(data)?data:data.videos;
+      if(!Array.isArray(incoming))throw new Error('Formato inválido');
+      let added=0;
+      incoming.forEach(v=>{if(v && typeof v.url==='string' && validUrl(v.url) && typeof v.title==='string' && !videos.some(old=>old.url===v.url)){videos.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),url:v.url,title:v.title,author:String(v.author||''),playlist:String(v.playlist||''),cover:safeImageUrl(v.cover||''),watched:!!v.watched,createdAt:Number(v.createdAt)||Date.now()});added++;}});
+      persist();render();alert(`${added} vídeo(s) importado(s). Itens com links já existentes foram ignorados.`);
+    } catch { alert('Não foi possível ler esse arquivo de backup.'); }
+    e.target.value='';
+  });
+  safeLoad(); render();
+})();
+</script>
+</body>
+</html>
